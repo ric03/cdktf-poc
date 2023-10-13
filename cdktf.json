@@ -1,0 +1,11 @@
+{
+  "language": "typescript",
+  "app": "npx ts-node main.ts",
+  "projectId": "63012ae5-a9b2-4f98-9b0e-947003a3b8d8",
+  "sendCrashReports": "true",
+  "terraformProviders": [
+    "Mongey/kafka@~> 0.5"
+  ],
+  "terraformModules": [],
+  "context": {}
+}
