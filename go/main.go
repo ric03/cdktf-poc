@@ -31,25 +31,33 @@ func NewMyStack(scope constructs.Construct, id string) cdktf.TerraformStack {
 	})
 
 	// The code that defines your stack goes here
-	topic.NewTopic(stack, jsii.String("abc"), &topic.TopicConfig{
-		Name:              jsii.String("my-topic"),
+	products := []string{"apple", "peaches", "grapes"}
+
+	for _, product := range products {
+		NewAclAndTopic(stack, product)
+	}
+
+	return stack
+}
+
+func NewAclAndTopic(stack cdktf.TerraformStack, name string) {
+	topic.NewTopic(stack, jsii.String(name), &topic.TopicConfig{
+		Name:              jsii.String(name),
 		Partitions:        jsii.Number[int](5),
 		ReplicationFactor: jsii.Number[int](3),
 		Config:            &map[string]*string{"segment.ms": jsii.String("20000")},
 		Id:                nil,
 	})
 
-	acl.NewAcl(stack, jsii.String("acl"), &acl.AclConfig{
+	acl.NewAcl(stack, jsii.String(name+"acl"), &acl.AclConfig{
 		AclHost:           jsii.String("*"),
 		AclOperation:      jsii.String("All"),
 		AclPermissionType: jsii.String("Allow"),
 		AclPrincipal:      jsii.String("User:Hans"),
-		ResourceName:      jsii.String("acl-name"),
+		ResourceName:      jsii.String(name),
 		ResourceType:      jsii.String("Topic"),
-		Id:                jsii.String("acl-id"),
+		Id:                jsii.String(name + "acl-id"),
 	})
-
-	return stack
 }
 
 func main() {
