@@ -12,21 +12,27 @@ class MyStack extends TerraformStack {
             bootstrapServers: [],
         })
 
-        // define resources here
-        new Topic(this, 'my-topic-id', {
-            name: 'temperature',
-            partitions: 5,
-            replicationFactor: 3,
-            config: {"segment.ms": "20000"},
-        })
+        const products = ["apple", "peaches", "grapes"];
 
-        new Acl(this, 'my-acl-id', {
-            resourceName: 'temperature_acl',
+        // define resources here
+        products.forEach(product => this.AclAndGroup(product))
+    }
+
+    private AclAndGroup(name: string) {
+        new Acl(this, `${name}-acl-id`, {
+            resourceName: `${name}-acl`,
             resourceType: 'Topic',
             aclPrincipal: 'User:Hans',
             aclHost: '*',
             aclOperation: 'All',
             aclPermissionType: 'Allow',
+        })
+
+        new Topic(this, `${name}-topic-id`, {
+            name: name,
+            partitions: 5,
+            replicationFactor: 3,
+            config: {"segment.ms": "20000"},
         })
     }
 }
