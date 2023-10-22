@@ -31,7 +31,7 @@ func NewMyStack(scope constructs.Construct, id string) cdktf.TerraformStack {
 	})
 
 	// The code that defines your stack goes here
-	products := []string{"apple", "peaches", "grapes"}
+	products := []string{"pineapple", "peaches", "grapes"}
 
 	for _, product := range products {
 		NewAclAndTopic(stack, product)
@@ -41,7 +41,7 @@ func NewMyStack(scope constructs.Construct, id string) cdktf.TerraformStack {
 }
 
 func NewAclAndTopic(stack cdktf.TerraformStack, name string) {
-	topic.NewTopic(stack, jsii.String(name), &topic.TopicConfig{
+	topic.NewTopic(stack, jsii.String(name+"-topic"), &topic.TopicConfig{
 		Name:              jsii.String(name),
 		Partitions:        jsii.Number[int](5),
 		ReplicationFactor: jsii.Number[int](3),
@@ -49,7 +49,7 @@ func NewAclAndTopic(stack cdktf.TerraformStack, name string) {
 		Id:                nil,
 	})
 
-	acl.NewAcl(stack, jsii.String(name+"acl"), &acl.AclConfig{
+	acl.NewAcl(stack, jsii.String(name+"-acl"), &acl.AclConfig{
 		AclHost:           jsii.String("*"),
 		AclOperation:      jsii.String("All"),
 		AclPermissionType: jsii.String("Allow"),
